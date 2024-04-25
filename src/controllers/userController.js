@@ -78,7 +78,7 @@ class UserController {
 			if(user == null){
 				throw new Error('User not found');
 			}
-			res.status(200).json(user.toJSON());
+			res.status(200).json(user);
 		}catch(err){
 			console.error('Error when updating an user: ', err);
 			res.status(500).json({ message: 'Internal server error' });

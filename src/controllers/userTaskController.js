@@ -43,6 +43,7 @@ class userTaskController {
 
 	static async findByUserId(req, res){
 		const userId = req.params.userId;
+		console.log("userId: ", userId);
 		if(!userId){
 			return res.status(404).json({ message: 'Missing parameters' });
 		}

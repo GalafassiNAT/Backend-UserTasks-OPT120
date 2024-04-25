@@ -68,10 +68,10 @@ class UserTaskService{
 			let userTasks = [];
 			for(let i = 0; i < result.length; i++){
 				const userTask = new UserTask();
-				userTask.userId = result[i].userId;
-				userTask.taskId = result[i].taskId;
-				userTask.score = result[i].score;
-				userTask.delivered = result[i].delivered;
+				userTask.userId = result[i].UserId;
+				userTask.taskId = result[i].TaskId;
+				userTask.score = result[i].Score;
+				userTask.delivered = result[i].Delivered;
 				userTasks.push(userTask);
 			}
 			return userTasks;
@@ -137,10 +137,10 @@ class UserTaskService{
 				return null;
 			}
 			const userTask = new UserTask();
-			userTask.userId = result[0].userId;
-			userTask.taskId = result[0].taskId;
-			userTask.score = result[0].score;
-			userTask.delivered = result[0].delivered;
+			userTask.userId = result[0].UserId;
+			userTask.taskId = result[0].TaskId;
+			userTask.score = result[0].Score;
+			userTask.delivered = result[0].Delivered;
 			return userTask;
 		}catch(err){
 			console.log('Error when getting an user task by user id and task id: ', err);
@@ -156,7 +156,7 @@ class UserTaskService{
 		userTask.delivered = new Date();
 		try{
 			const result = await new Promise((resolve, reject) => {
-				db.query('UPDATE UserTask SET delivered = ? WHERE userId = ? AND taskId = ?', [userTask.delivered, userId, taskId], (err, result) => {
+				db.query('UPDATE UserTask SET delivered = ?, isDelivered = ? WHERE userId = ? AND taskId = ?', [userTask.delivered, userTask.isDelivered, userId, taskId], (err, result) => {
 					if(err) reject(err);
 					else resolve(result);
 				});

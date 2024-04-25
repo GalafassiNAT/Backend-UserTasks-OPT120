@@ -3,12 +3,16 @@ class UserTask{
 	#taskId;
 	#delivered; // Date
 	#score;
+	#isDelivered = false;
+	#isDeleted = false;
 
-	constructor(userId, taskId, delivered, score){
+	constructor(userId, taskId, delivered, score, isDelivered, isDeleted){
 		this.#userId = userId;
 		this.#taskId = taskId;
 		this.#delivered = delivered;
 		this.#score = score;
+		this.#isDelivered = isDelivered;
+		this.#isDeleted = isDeleted;
 	}
 
 	// Getters
@@ -19,6 +23,10 @@ class UserTask{
 	get delivered() { return this.#delivered; }
 
 	get score() { return this.#score; }
+	
+	get isDelivered() { return this.#isDelivered; }
+
+	get isDeleted() { return this.#isDeleted; }
 
 	// Setters
 	set userId(userId) { this.#userId = userId; }
@@ -29,13 +37,18 @@ class UserTask{
 
 	set score(score) { this.#score = score; }
 
+	set isDelivered(isDelivered) { this.#isDelivered = isDelivered; }
+
+	set isDeleted(isDeleted) { this.#isDeleted = isDeleted; }
 
 	toJSON(){
 		return {
-			userId: this.#userId,
-			taskId: this.#taskId,
-			delivered: this.#delivered,
-			score: this.#score
+			UserId: this.#userId,
+			TaskId: this.#taskId,
+			Delivered: this.#delivered,
+			Score: this.#score,
+			IsDeleted: this.#isDeleted,
+			IsDelivered: this.#isDelivered
 		}
 	}
 }

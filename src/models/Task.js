@@ -3,12 +3,12 @@ class Task {
 	#id;
 	#title;
 	#description;
-	#date
+	#deliveryDate
 
-	constructor(title, description, date){
+	constructor(title, description, deliveryDate){
 		this.#title = title;
 		this.#description = description;
-		this.#date = date;
+		this.#deliveryDate = deliveryDate;
 	}
 
 	// Getters
@@ -19,7 +19,7 @@ class Task {
 
 	get description(){ return this.#description; }
 
-	get deliveryDate(){ return this.#date; }
+	get deliveryDate(){ return this.#deliveryDate; }
 
 
 	// Setters 
@@ -30,7 +30,7 @@ class Task {
 
 	set description(description) { this.#description = description; }
 
-	set date(date) { this.#date = date; }
+	set deliveryDate(deliveryDate) { this.#deliveryDate = deliveryDate; }
 
 
 	toJSON(){
@@ -38,7 +38,7 @@ class Task {
 			id: this.#id,
 			title: this.#title,
 			description: this.#description,
-			date: this.#date
+			deliveryDate: this.#deliveryDate
 		}
 	}
 

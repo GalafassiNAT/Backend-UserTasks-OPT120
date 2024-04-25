@@ -36,10 +36,10 @@ class TaskService{
 			});
 			const task = new Task();
 			if(result.length > 0){
-				task.id = result[0].id;
-				task.title = result[0].title;
-				task.description = result[0].description;
-				task.deliveryDate = result[0].deliveryDate;
+				task.id = result[0].Id;
+				task.title = result[0].Title;
+				task.description = result[0].Description;
+				task.deliveryDate = result[0].DeliveryDate;
 			}else{
 				console.log('Task not found!');
 				return null;
@@ -62,10 +62,10 @@ class TaskService{
 			let tasks = [];
 			for(let i = 0; i < result.length; i++){
 				const task = new Task();
-				task.id = result[i].id;
-				task.title = result[i].title;
-				task.description = result[i].description;
-				task.deliveryDate = result[i].deliveryDate;
+				task.id = result[i].Id;
+				task.title = result[i].Title;
+				task.description = result[i].Description;
+				task.deliveryDate = result[i].DeliveryDate;
 				tasks.push(task);
 			}
 			return tasks;
