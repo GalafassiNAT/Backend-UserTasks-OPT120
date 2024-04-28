@@ -71,7 +71,7 @@ class TaskController{
 			if(task == null){
 				throw new Error('Task not updated');
 			}
-			res.status(200).json(task.toJSON());
+			res.status(200).json(task);
 		}catch(err){
 			console.error('Error when updating a task: ', err);
 			res.status(500).json({ message: 'Internal server error' });

@@ -2,6 +2,7 @@ require('dotenv').config();
 const User = require('../models/User');
 const db = require('../dabatase/dbConnection')
 const bcrypt = require('bcryptjs');
+const Profile = require('../models/Profile');
 
 class UserService{
 	
@@ -16,7 +17,11 @@ class UserService{
 		const saltRounds = Number(process.env.SALT) || 10;
 		const salt = bcrypt.genSaltSync(saltRounds);
 		
-		user = { name: name, email: email, password: bcrypt.hashSync(password, salt) };
+		user = { name: name, 
+			email: email, 
+			password: bcrypt.hashSync(password, salt),
+			profileId: Profile.USER.id};
+		
 		try{
 			const result = await new Promise((resolve, reject) => {
 				db.query('INSERT INTO User SET ?', user, (err, result) => {
@@ -34,9 +39,17 @@ class UserService{
 	
 
 	static async findById(id){
+		console.log("findByID")
 		try{
 			const result = await new Promise((resolve, reject) => {
-				db.query('SELECT * FROM User WHERE id = ?', id, (err, result) => {
+				const query = `
+				SELECT User.*, Profiles.Name as ProfileName 
+				FROM User
+				INNER JOIN Profiles ON User.profileId = Profiles.id
+				WHERE User.id = ?
+				`;
+
+				db.query(query, id, (err, result) => {
 					if(err) reject(err);
 					else resolve(result);
 				});
@@ -47,8 +60,8 @@ class UserService{
 				user.name = result[0].Name;
 				user.email = result[0].Email;
 				user.password = result[0].Password;
+				user.profile = new Profile(result[0].ProfileId, result[0].ProfileName);
 			}else{
-				
 				console.log('User not found!');
 				return null;
 			}
@@ -63,7 +76,14 @@ class UserService{
 	static async findByEmail(email){
 		try{
 			const result = await new Promise((resolve, reject) => {
-				db.query('SELECT * FROM User WHERE Email = ?', email, (err, result) => {
+				const query = `
+				SELECT User.*, Profiles.Name as ProfileName 
+				FROM User
+				INNER JOIN Profiles ON User.profileId = Profiles.id
+				WHERE User.email = ?
+				`;
+
+				db.query(query, email, (err, result) => {
 					if(err) reject(err);
 					else resolve(result);
 				});
@@ -74,23 +94,25 @@ class UserService{
 				user.name = result[0].Name;
 				user.email = result[0].Email;
 				user.password = result[0].Password;
+				user.profile = new Profile(result[0].ProfileId, result[0].ProfileName);
 			}else{
 				console.log('User not found!');
 				return null;
 			}
 			return user;
+				
 		}catch(err){
 			console.log('Error when getting an user by email: ', err);
 			return null;
 		}
-	
 	}
 
 
 	static async findAll(){
 		try{
 			const result = await new Promise((resolve, reject) => {
-				db.query('SELECT * FROM User', (err, result) => {
+				db.query('SELECT User.*, Profiles.Name AS ProfileName FROM User LEFT JOIN Profiles ON User.profileId = Profiles.id', 
+				(err, result) => {
 					if(err) reject(err);
 					else resolve(result);
 				});
@@ -102,6 +124,9 @@ class UserService{
 				user.name = result[i].Name;
 				user.email = result[i].Email;
 				user.password = result[i].Password;
+				
+				user.profile = new Profile(result[i].ProfileId, result[i].ProfileName)
+
 				users.push(user);
 			}
 			return users;

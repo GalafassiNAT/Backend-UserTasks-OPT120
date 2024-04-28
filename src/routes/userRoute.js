@@ -1,14 +1,26 @@
 const express = require('express');
 const userController = require('../controllers/userController.js');
+const requireTokenJWT = require('../middlewares/RequireJWT.js');
+const UserAuthorization = require('../middlewares/UserAuthorization.js');
+const AdminAuthorization = require('../middlewares/AdminAuthorization.js');
 
 const userRoute = express.Router();
 
 userRoute.post('/', userController.create);
 
-userRoute.get('/:id', userController.findById);
+userRoute.get('/email/:email', requireTokenJWT, AdminAuthorization, userController.findByEmail);
 
-userRoute.get('/', userController.findAll);
+userRoute.get('/:id', requireTokenJWT, UserAuthorization, userController.findById);
 
-userRoute.put('/:id', userController.update);
+
+userRoute.get('/', requireTokenJWT, AdminAuthorization , async  (req, res, next) => {
+	try{
+		await userController.findAll(req, res, next);
+	} catch(err){
+		next(err);
+	}
+});
+
+userRoute.put('/:id', requireTokenJWT, UserAuthorization, userController.update);
 
 module.exports = userRoute;

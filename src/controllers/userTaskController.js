@@ -1,3 +1,4 @@
+const AppError = require('../exceptions/AppError.js');
 const UserTaskService = require('../services/UserTaskService.js');
 
 
@@ -45,18 +46,22 @@ class userTaskController {
 		const userId = req.params.userId;
 		console.log("userId: ", userId);
 		if(!userId){
-			return res.status(404).json({ message: 'Missing parameters' });
+			throw new AppError('Missing parameters', 404);
+		}
+
+		if(req.payload.profile != 'ADMIN' || req.payload.id != userId){
+			throw new AppError('Access denied', 403);
 		}
 
 		try{
 			const userTasks = await UserTaskService.findByUserId(userId);
 			if(userTasks == null){
-				throw new Error('User tasks not found');
+				throw new AppError('User tasks not found', 404);
 			}
 			res.status(200).json(userTasks);
 		}catch(err){
 			console.log('Error when getting user tasks by user id: ', err);
-			res.status(500).json({ message: 'Internal server error' });
+			throw new AppError('Internal server error', 500);
 		}
 
 	}
@@ -66,7 +71,7 @@ class userTaskController {
 		if(!taskId){
 			return res.status(404).json({ message: 'Missing parameters' });
 		}
-
+	
 		try{
 			const userTasks = await UserTaskService.findByTaskId(taskId);
 			if(userTasks == null){
@@ -84,13 +89,17 @@ class userTaskController {
 		const userId = req.params.userId;
 		const taskId = req.params.taskId;
 		if(!userId || !taskId){
-			return res.status(404).json({ message: 'Missing parameters' });
+			throw new AppError('Missing parameters', 404);
 		}
+
+		if(req.payload.profile != 'ADMIN' || req.payload.id != userId){
+			throw new AppError('Access denied', 403);
+		}		
 
 		try{
 			const userTask = await UserTaskService.findByUserIdAndTaskId(userId, taskId);
 			if(userTask == null){
-				throw new Error('User task not found');
+				throw new AppError('User task not found', 404);
 			}
 			res.status(200).json(userTask.toJSON());
 		}catch(err){
@@ -107,6 +116,10 @@ class userTaskController {
 
 		if(!userId || !taskId || !score){
 			return res.status(400).json({ message: 'Missing parameters' });
+		}
+
+		if(req.payload.profile != 'ADMIN'){
+			throw new AppError('Access denied', 403);
 		}
 
 		try{
@@ -129,6 +142,10 @@ class userTaskController {
 
 		if(!userId || !taskId || !deliveredDate){
 			return res.status(400).json({ message: 'Missing parameters' });
+		}
+
+		if(req.payload.profile != 'USER' && req.payload.id != userId){
+			throw new AppError('Access denied', 403);
 		}
 
 		try{

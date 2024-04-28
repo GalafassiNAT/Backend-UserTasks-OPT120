@@ -1,11 +1,13 @@
 const express = require('express');
 const taskRoute = express.Router();
-const taskController = require('../controllers/taskController')
+const taskController = require('../controllers/taskController');
+const AdminAuthorization = require('../middlewares/AdminAuthorization');
+const UserAuthorization = require('../middlewares/UserAuthorization');
 
-taskRoute.post('/', taskController.create);
-taskRoute.get('/', taskController.findAll);
-taskRoute.get('/:id', taskController.findById);
-taskRoute.put('/:id', taskController.update);
+taskRoute.post('/', AdminAuthorization, taskController.create);
+taskRoute.get('/', AdminAuthorization,taskController.findAll);
+taskRoute.get('/:id', UserAuthorization, taskController.findById);
+taskRoute.put('/:id', AdminAuthorization, taskController.update);
 
 
 module.exports = taskRoute;
