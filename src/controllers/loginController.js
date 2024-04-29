@@ -11,7 +11,6 @@ class LoginController {
 			throw new AppError('Email e senha são necessários!', 400);
 		}
 
-		console.log('about to find user');
 		const user = await UserService.findByEmail(email);
 		if(!user){
 			throw new AppError('Email ou senha inválidos!', 401);

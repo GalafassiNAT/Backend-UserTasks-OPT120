@@ -6,7 +6,13 @@ const AdminAuthorization = require('../middlewares/AdminAuthorization.js');
 
 const userRoute = express.Router();
 
-userRoute.post('/', userController.create);
+userRoute.post('/', async (req, res, next) => {
+	try{
+		await userController.create(req, res, next);
+	}catch (err){
+		next(err);
+	}
+});
 
 userRoute.get('/email/:email', requireTokenJWT, AdminAuthorization, userController.findByEmail);
 
