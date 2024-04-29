@@ -38,8 +38,10 @@ class UserController {
 			if(user == null){
 				throw new Error('User not found');
 			}
+			
+			console.log('PROFILE NAME: ', user.profile.name);
 
-			if(user.profile != 'ADMIN' && user.id != req.payload.id){
+			if(req.payload.profile.name != 'ADMIN' && user.id != req.payload.id){
 				throw new AppError('Access denied', 403);
 			}
 			console.log('User found: ', user.toJSON());

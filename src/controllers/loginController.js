@@ -21,10 +21,12 @@ class LoginController {
 			throw new AppError('Email ou senha inválidos!', 401);
 		}
 
-		console.log(user.toJSON());
 		const profile = user.profile;	
-		const token = jwtUtil.generateToken({id: user.id, email: user.email, profile: profile});
-	
+		const token = jwtUtil.generateToken({id: user.id, name: user.name, profile: profile});
+		
+		const decodedToken = jwtUtil.decodeToken(token);
+		console.log('Exp: ', decodedToken.exp);
+
 		res.setHeader('Authorization', `Bearer ${token}`)
 		res.status(200).json({token: token});
 	}

@@ -45,11 +45,17 @@ class userTaskController {
 	static async findByUserId(req, res){
 		const userId = req.params.userId;
 		console.log("userId: ", userId);
+		console.log('PAYLOAD: ', req.payload.profile);
+
 		if(!userId){
 			throw new AppError('Missing parameters', 404);
 		}
 
-		if(req.payload.profile != 'ADMIN' || req.payload.id != userId){
+		if(req.payload.profile.name === 'ADMIN')
+			console.log('SOU UM ADMINISTRADOR');
+
+
+		if(req.payload.profile.name != 'ADMIN' && req.payload.id != userId){
 			throw new AppError('Access denied', 403);
 		}
 
@@ -92,7 +98,7 @@ class userTaskController {
 			throw new AppError('Missing parameters', 404);
 		}
 
-		if(req.payload.profile != 'ADMIN' || req.payload.id != userId){
+		if(req.payload.profile.name != 'ADMIN' && req.payload.id != userId){
 			throw new AppError('Access denied', 403);
 		}		
 
@@ -118,7 +124,7 @@ class userTaskController {
 			return res.status(400).json({ message: 'Missing parameters' });
 		}
 
-		if(req.payload.profile != 'ADMIN'){
+		if(req.payload.profile.name != 'ADMIN'){
 			throw new AppError('Access denied', 403);
 		}
 
@@ -144,7 +150,7 @@ class userTaskController {
 			return res.status(400).json({ message: 'Missing parameters' });
 		}
 
-		if(req.payload.profile != 'USER' && req.payload.id != userId){
+		if(req.payload.profile.name != 'USER' || req.payload.id != userId){
 			throw new AppError('Access denied', 403);
 		}
 
