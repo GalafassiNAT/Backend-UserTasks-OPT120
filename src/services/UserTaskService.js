@@ -16,6 +16,8 @@ class UserTaskService{
 		userTask.taskId = taskId;
 		userTask.score = 0;
 		userTask.delivered = null;
+		userTask.isDelivered = false;
+		userTask.isDeleted = false;
 		let userTaskJson = userTask.toJSON();
 		try{
 			const result = await new Promise((resolve, reject) => {
@@ -59,6 +61,7 @@ class UserTaskService{
 	}
 
 	static async findByUserId(userId){
+		console.log('userId: ', userId);
 		try{
 			const result = await new Promise((resolve, reject) => {
 				db.query('SELECT * FROM UserTask WHERE userId = ?', userId, (err, result) => {
