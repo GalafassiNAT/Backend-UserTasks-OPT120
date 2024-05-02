@@ -1,6 +1,6 @@
 require('dotenv').config();
 const User = require('../models/User');
-const db = require('../dabatase/dbConnection')
+const db = require('../database/dbConnection')
 const bcrypt = require('bcryptjs');
 const Profile = require('../models/Profile');
 

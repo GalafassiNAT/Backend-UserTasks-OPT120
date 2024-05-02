@@ -1,5 +1,5 @@
 const UserTask = require('../models/UserTask.js');
-const db = require('../dabatase/dbConnection.js');
+const db = require('../database/dbConnection.js');
 
 
 class UserTaskService{
